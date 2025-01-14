@@ -21,9 +21,9 @@ export const fetchDistances = async (address, fireStations) => {
   ) {
     throw new Error("La API Distance Matrix no devolvió resultados.");
   }
-  console.log("Geocode Response:", geocodeData);
-  console.log("Distance Matrix Response:", distanceData);
-  
+  console.log("Origen para Distance Matrix:", `${location.lat},${location.lng}`);
+console.log("Destinos para Distance Matrix:", destinations);
+
   return fireStations.map((station, index) => {
     const element = distanceData.rows[0].elements[index];
     return {
