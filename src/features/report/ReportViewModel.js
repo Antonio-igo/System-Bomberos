@@ -4,32 +4,24 @@ import { fetchDistances } from "./ReportModel";
 export const useReportViewModel = (fireStations) => {
   const [address, setAddress] = useState("");
   const [distances, setDistances] = useState([]);
-  const [modalData, setModalData] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const calculateDistances = async () => {
     try {
-      const updatedStations = await fetchDistances(address, fireStations);
-      setDistances(updatedStations);
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Error al calcular las distancias.");
+      setError(null); // Limpia errores previos
+      const results = await fetchDistances(address, fireStations);
+      setDistances(results);
+    } catch (err) {
+      console.error("Error:", err.message);
+      setError(err.message); // Muestra el error al usuario
     }
   };
 
-  const openModal = (station) => {
-    setModalData({
-      ...station,
-      address, // Incluye la dirección ingresada
-    });
-    setShowModal(true);
+  return {
+    address,
+    setAddress,
+    distances,
+    calculateDistances,
+    error, // Devuelve el error al componente
   };
-  
-
-  const closeModal = () => {
-    setShowModal(false);
-    setModalData(null);
-  };
-
-  return { address, setAddress, distances, calculateDistances, showModal, modalData, openModal, closeModal };
 };

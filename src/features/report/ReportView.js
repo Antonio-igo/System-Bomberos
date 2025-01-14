@@ -76,6 +76,7 @@ const ReportView = () => {
           Calcular Distancias
         </button>
       </form>
+      
       <div className="mt-8">
         <ResultTable distances={distances} onOpenModal={openModal} />
       </div>
