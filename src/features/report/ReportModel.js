@@ -1,9 +1,7 @@
 import { geocodeAddress, calculateDistances } from "../../api/mapsApis";
-
 export const fetchDistances = async (address, fireStations) => {
   const geocodeData = await geocodeAddress(address);
 
-  // Verifica si la geocodificación devolvió resultados
   if (!geocodeData.results || geocodeData.results.length === 0) {
     throw new Error("No se encontraron resultados para la dirección ingresada.");
   }
@@ -13,7 +11,9 @@ export const fetchDistances = async (address, fireStations) => {
 
   const distanceData = await calculateDistances(`${location.lat},${location.lng}`, destinations);
 
-  // Verifica si Distance Matrix API devolvió datos
+  // Inspecciona los datos recibidos
+  console.log("Datos recibidos de Distance Matrix:", distanceData);
+
   if (
     !distanceData.rows ||
     distanceData.rows.length === 0 ||
@@ -21,8 +21,6 @@ export const fetchDistances = async (address, fireStations) => {
   ) {
     throw new Error("La API Distance Matrix no devolvió resultados.");
   }
-  console.log("Origen para Distance Matrix:", `${location.lat},${location.lng}`);
-console.log("Destinos para Distance Matrix:", destinations);
 
   return fireStations.map((station, index) => {
     const element = distanceData.rows[0].elements[index];
@@ -32,5 +30,4 @@ console.log("Destinos para Distance Matrix:", destinations);
       duration: element.duration ? element.duration.text : "No disponible",
     };
   });
-
 };
